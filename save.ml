@@ -15,7 +15,10 @@ let load : (Creature.creature option) =
 		let data = input_line file in
 		close_in file;
 		let parsed_values = Str.split (Str.regexp " : \\| ") data in
-		Some (new Creature.creature (int_of_string @@ List.nth parsed_values 1) (* health *)
+		if List.length parsed_values <> 8 then None
+		else
+		Some (new Creature.creature
+			(int_of_string @@ List.nth parsed_values 1) (* health *)
 			(int_of_string @@ List.nth parsed_values 3) (* energy *)
 			(int_of_string @@ List.nth parsed_values 5) (* hygiene *)
 			(int_of_string @@ List.nth parsed_values 7) (* happyness *)

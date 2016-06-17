@@ -60,7 +60,7 @@ let do_action action creature =
 	| 2 -> print_endline "action thunder"; creature#thunder
 	| 3 -> print_endline "action kill"; creature#kill
 	| 4 -> print_endline "action sleep"; creature#sleep
-	| 5 -> print_endline "action save_and_quit"; Display.display_save_and_quit (); creature
+	| 5 -> print_endline "action save_and_quit"; ignore (Save.save creature); creature (* TODO: test the save return value *)
 	| _ -> print_endline "action other"; creature
 
 
@@ -107,5 +107,9 @@ play_new_game () =
 let () =
 	Display.create_win ();
     last_ticks := get_time ();
-	let creature = new Creature.creature 100 100 100 100 in
+	
+	let creature = ( match Save.load with
+	| None -> new Creature.creature 100 100 100 100
+	| Some (creature) -> creature
+	) in
 	main_loop creature creature#is_alive (!last_ticks)(* (get_timestamp ()) *)
