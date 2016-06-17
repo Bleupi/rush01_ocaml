@@ -10,18 +10,25 @@ let save (creature : Creature.creature) : bool =
 	| _ -> false
 
 let load : (Creature.creature option) =
+	let is_good x = (
+		if x >= 0 && x <= 100 then true
+		else false
+	) in
+
 	try (
 		let file = open_in save_filename in
 		let data = input_line file in
 		close_in file;
 		let parsed_values = Str.split (Str.regexp " : \\| ") data in
 		if List.length parsed_values <> 8 then None
-		else
-		Some (new Creature.creature
-			(int_of_string @@ List.nth parsed_values 1) (* health *)
-			(int_of_string @@ List.nth parsed_values 3) (* energy *)
-			(int_of_string @@ List.nth parsed_values 5) (* hygiene *)
-			(int_of_string @@ List.nth parsed_values 7) (* happyness *)
+		else (
+			let health = int_of_string @@ List.nth parsed_values 1 in
+			let energy = int_of_string @@ List.nth parsed_values 3 in
+			let hygiene = int_of_string @@ List.nth parsed_values 5 in
+			let happyness = int_of_string @@ List.nth parsed_values 7 in
+			if is_good health && is_good energy && is_good hygiene && is_good happyness then
+			Some (new Creature.creature health energy hygiene happyness)
+			else None
 		)
 	) with
 	| _ -> None
