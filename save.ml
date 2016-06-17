@@ -11,6 +11,14 @@ let save (creature : Creature.creature) : bool =
 
 let load : (Creature.creature option) =
 	try (
-		None
+		let file = open_in save_filename in
+		let data = input_line file in
+		close_in file;
+		let parsed_values = Str.split (Str.regexp " : \\| ") data in
+		Some (new Creature.creature (int_of_string @@ List.nth parsed_values 1) (* health *)
+			(int_of_string @@ List.nth parsed_values 3) (* energy *)
+			(int_of_string @@ List.nth parsed_values 5) (* hygiene *)
+			(int_of_string @@ List.nth parsed_values 7) (* happyness *)
+		)
 	) with
 	| _ -> None
