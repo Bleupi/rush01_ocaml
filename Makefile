@@ -1,5 +1,5 @@
 RESULT = test
-SOURCES = Creature.ml Display.ml main_loop.ml
+SOURCES = Creature.ml Display.ml save.ml main_loop.ml
 LIBS = sdl
 INCDIRS = +sdl
 PACKS = sdl.sdlimage sdl.sdlmixer sdl.sdlttf sdl
