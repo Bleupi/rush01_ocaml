@@ -23,7 +23,7 @@ let  wait_one_sec timestamp =
 	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
 	??? Sdltimer.get_ticks ??? *)
 let last_ticks = ref 0
-let fps = 1000 / 30
+let fps = 1000 / 25
 
 let get_time () =
 	Sdltimer.get_ticks ()
