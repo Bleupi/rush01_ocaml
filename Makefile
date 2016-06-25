@@ -1,4 +1,4 @@
 RESULT = test
-SOURCES = Display.ml main_loop.ml
+SOURCES = Creature.ml Display.ml main_loop.ml
 OCAMLMAKEFILE = OCamlMakefile 
 include $(OCAMLMAKEFILE)

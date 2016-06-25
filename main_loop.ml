@@ -22,17 +22,16 @@
 let  wait_one_sec timestamp = 
 	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
 	??? Sdltimer.get_ticks ??? *)
-let play_new_game () =
-	let creature_bis = Creature.creature in
-	main_loop creature_bis creature_bis#is_alive
+
 
 let do_action action creature =
 	match action with
-	| 0 -> creature#eat 
-	| 1 -> creature#bath
-	| 2 -> creature#thunder
-	| 3 -> creature#kill
-	| 4 -> save_and_quit creature
+	| 0 -> print_endline  "action eat"; creature#eat 
+	| 1 -> print_endline  "action bath"; creature#bath
+	| 2 -> print_endline  "action thunder"; creature#thunder
+	| 3 -> print_endline  "action kill"; creature#kill
+	| 4 -> print_endline  "action save_and_quit"; Display.display_save_and_quit (); creature
+	| _ -> print_endline  "action other"; creature
 
 
 let rec main_loop creature creature_state =
@@ -41,7 +40,7 @@ let rec main_loop creature creature_state =
 			begin
 				Display.display_gameover ();
 				Display.display_new_game ();
-				let input = Display.get_input () in 
+				let input = Display.get_event () in 
 				if (input = 5)
 					then play_new_game ()
 				else ()
@@ -50,8 +49,8 @@ let rec main_loop creature creature_state =
 			begin 
 				Display.clear_win ();
 				Display.display_creature creature;
-				Display.display_meters creature#get_meters;
-				Display.display_actions creature#get_actions ;
+				Display.display_meters creature#get;
+				Display.display_actions creature#get_actions;
 				Display.display_button_save_and_quit ();
 				let player_action = Display.get_event ()
 				in let new_creature = do_action player_action creature
@@ -61,9 +60,12 @@ let rec main_loop creature creature_state =
 					main_loop new_creature new_creature#is_alive (* (get_timestamp ()) *)
 				end
 			end
-
+and 
+play_new_game () =
+	let creature_bis = new Creature.creature 100 100 100 100 in
+	main_loop creature_bis creature_bis#is_alive
 
 let () =
 	Display.create_win ();
-	let creature = new Creature.creature in 
+	let creature = new Creature.creature 100 100 100 100 in 
 		main_loop creature creature#is_alive (* (get_timestamp ()) *)
