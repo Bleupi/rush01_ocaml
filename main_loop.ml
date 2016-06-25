@@ -16,6 +16,12 @@
 
 *)
 
+let get_timestamp = 
+	??????
+
+let  wait_one_sec timestamp = 
+	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
+	??? Sdltimer.get_ticks ???
 let play_new_game () =
 	let creature_bis = create_creature () in
 	main_loop creature (creature.is_alive ()) 
@@ -29,7 +35,7 @@ let do_action action creature =
 	| 4 -> save_and_quit creature
 
 
-let rec main_loop creature creature_state =
+let rec main_loop creature creature_state timestamp =
 	match creature_state with 
 	| false -> 
 			begin
@@ -49,11 +55,15 @@ let rec main_loop creature creature_state =
 				Display.display_button_save_and_quit ()
 				let player_action = Display.get_event ()
 				in let new_creature = do_action player_action creature
-				in main_loop new_creature (new_creature.is_alive ()) 
+				in
+				begin  
+					wait_one_sec timestamp; 
+					main_loop new_creature (new_creature.is_alive ()) (get_timestamp ())
+				end
 			end
 
 
 let () =
 	Display.create_win
 	let creature = create_creature () in 
-		main_loop creature (creature.is_alive ()) 
+		main_loop creature (creature.is_alive ()) (get_timestamp ())
