@@ -1,7 +1,7 @@
 RESULT 			= itama
-SOURCES 		= testsdl.ml
+SOURCES 		= button.ml testsdl.ml
 LIBS			= sdl
-INCDIRS			= +sdl
-PACKS			= sdl.sdlimage sdl.sdlmixer sdl.sdlttf sdl
+# INCDIRS			= +sdl
+PACKS			= sdl sdl.sdlimage sdl.sdlmixer sdl.sdlttf
 OCAMLMAKEFILE = OCamlMakefile 
 include $(OCAMLMAKEFILE)
