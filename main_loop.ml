@@ -22,9 +22,24 @@
 let  wait_one_sec timestamp = 
 	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
 	??? Sdltimer.get_ticks ??? *)
-let  wait_one_sec timestamp =
-	Random.self_init ();
-	Random.bool ()
+let get_time () =
+	Sdltimer.get_ticks ()
+
+let  wait_one_sec prev_time =
+	let curr_time = get_time () in
+	if curr_time -. prev_time >= 1.
+		then 
+			begin
+				print_endline ((string_of_float(prev_time)) ^ ", curr_time: "^string_of_float curr_time);
+				true
+			end
+	else 
+		begin
+			print_endline ((string_of_float(prev_time)) ^ ", curr_time: "^string_of_float curr_time);
+			(* (0.3 -. (curr_time -. prev_time)) *)
+			Unix.sleep (2);
+			false
+		end
 
 let do_action action creature =
 	match action with
@@ -36,7 +51,7 @@ let do_action action creature =
 	| _ -> print_endline  "action other"; creature
 
 
-let rec main_loop creature creature_state =
+let rec main_loop creature creature_state prev_time =
 	match creature_state with 
 	| false -> 
 			begin
@@ -59,23 +74,23 @@ let rec main_loop creature creature_state =
 				in
 				begin  
 					(* wait_one_sec timestamp;  *)
-					if (wait_one_sec 0)
+					if (wait_one_sec prev_time)
 					then
 						begin 
 							let creature_x = new_creature#decre_health in 
-							main_loop creature_x creature_x#is_alive (* (get_timestamp ()) *)
+							main_loop creature_x creature_x#is_alive (get_time ())(* (get_timestamp ()) *)
+
 						end
 					else
-						main_loop new_creature new_creature#is_alive (* (get_timestamp ()) *)
-
+						main_loop new_creature new_creature#is_alive prev_time (* (get_timestamp ()) *)
 				end
 			end
 and 
 play_new_game () =
 	let creature_bis = new Creature.creature 100 100 100 100 in
-	main_loop creature_bis creature_bis#is_alive
+	main_loop creature_bis creature_bis#is_alive (get_time ())
 
 let () =
 	Display.create_win ();
 	let creature = new Creature.creature 100 100 100 100 in 
-		main_loop creature creature#is_alive (* (get_timestamp ()) *)
+		main_loop creature creature#is_alive (get_time ())(* (get_timestamp ()) *)

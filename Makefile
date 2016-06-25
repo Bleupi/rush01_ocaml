@@ -1,4 +1,8 @@
 RESULT = test
 SOURCES = Creature.ml Display.ml main_loop.ml
-OCAMLMAKEFILE = OCamlMakefile 
+LIBS = sdl
+INCDIRS = +sdl
+PACKS = sdl.sdlimage sdl.sdlmixer sdl.sdlttf sdl
+OCAMLMAKEFILE = OCamlMakefile
+THREADS =  yes
 include $(OCAMLMAKEFILE)
