@@ -22,7 +22,9 @@
 let  wait_one_sec timestamp = 
 	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
 	??? Sdltimer.get_ticks ??? *)
-
+let  wait_one_sec timestamp =
+	Random.self_init ();
+	Random.bool ()
 
 let do_action action creature =
 	match action with
@@ -57,7 +59,15 @@ let rec main_loop creature creature_state =
 				in
 				begin  
 					(* wait_one_sec timestamp;  *)
-					main_loop new_creature new_creature#is_alive (* (get_timestamp ()) *)
+					if (wait_one_sec 0)
+					then
+						begin 
+							let creature_x = new_creature#decre_health in 
+							main_loop creature_x creature_x#is_alive (* (get_timestamp ()) *)
+						end
+					else
+						main_loop new_creature new_creature#is_alive (* (get_timestamp ()) *)
+
 				end
 			end
 and 

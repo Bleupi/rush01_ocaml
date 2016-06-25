@@ -48,5 +48,9 @@ object (self)
       (*      self#storage [("health", _health + 15); ("energy", _energy + 15); ("hygiene", _hygiene - 5); ("happyness", _happyness + 10)];*)
       {< _health = self#limits(_health + 15); _energy = self#limits(_energy + 15); _hygiene = self#limits(_hygiene - 5); _happyness = self#limits(_happyness + 10) >}
     end
+  method  decre_health =
+      {< _health = self#limits(_health - 1); _energy = _energy; _hygiene = _hygiene; _happyness = _happyness >}
+ 
   method is_alive = _health > 0 && _energy > 0 && _happyness > 0 && _hygiene > 0
+
 end
