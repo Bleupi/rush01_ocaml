@@ -22,22 +22,29 @@
 let  wait_one_sec timestamp = 
 	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
 	??? Sdltimer.get_ticks ??? *)
+let last_ticks = ref 0
+let fps = 1000 / 30
+
 let get_time () =
 	Sdltimer.get_ticks ()
 
 let  wait_one_sec prev_time =
 	let curr_time = get_time () in
-	if curr_time -. prev_time >= 1.
+    let delay = fps - (curr_time - !last_ticks) in
+    print_endline ("DELAY : " ^ string_of_int(delay) ^ " diff curr - last : " ^ string_of_int((curr_time - !last_ticks)));
+    if delay > 0
+	then Sdltimer.delay (delay)
+    else Sdltimer.delay (fps);
+    last_ticks := get_time ();
+	if (curr_time - prev_time) >= 1000
 		then 
 			begin
-				print_endline ((string_of_float(prev_time)) ^ ", curr_time: "^string_of_float curr_time);
+			  print_endline (">= 1000 / 30 " ^ (string_of_int(prev_time)) ^ ", curr_time: "^string_of_int curr_time);
 				true
 			end
 	else 
 		begin
-			print_endline ((string_of_float(prev_time)) ^ ", curr_time: "^string_of_float curr_time);
-			(* (0.3 -. (curr_time -. prev_time)) *)
-			Unix.sleep (2);
+		  print_endline ("< 1000 / 30 " ^ (string_of_int(prev_time)) ^ ", curr_time: "^string_of_int curr_time);
 			false
 		end
 
@@ -52,17 +59,17 @@ let do_action action creature =
 
 
 let rec main_loop creature creature_state prev_time =
-	match creature_state with 
-	| false -> 
+	match creature_state with
+	| false ->
 			begin
 				Display.display_gameover ();
 				Display.display_new_game ();
-				let input = Display.get_event () in 
+				let input = Display.get_event () in
 				if (input = 5)
 					then play_new_game ()
 				else ()
 			end
-	| true	-> 
+	| true	->
 			begin 
 				Display.clear_win ();
 				Display.display_creature creature;
@@ -72,25 +79,25 @@ let rec main_loop creature creature_state prev_time =
 				let player_action = Display.get_event ()
 				in let new_creature = do_action player_action creature
 				in
-				begin  
+				begin
 					(* wait_one_sec timestamp;  *)
 					if (wait_one_sec prev_time)
 					then
-						begin 
-							let creature_x = new_creature#decre_health in 
+						begin
+							let creature_x = new_creature#decre_health in
 							main_loop creature_x creature_x#is_alive (get_time ())(* (get_timestamp ()) *)
-
 						end
 					else
 						main_loop new_creature new_creature#is_alive prev_time (* (get_timestamp ()) *)
 				end
 			end
-and 
+and
 play_new_game () =
 	let creature_bis = new Creature.creature 100 100 100 100 in
 	main_loop creature_bis creature_bis#is_alive (get_time ())
 
 let () =
 	Display.create_win ();
-	let creature = new Creature.creature 100 100 100 100 in 
-		main_loop creature creature#is_alive (get_time ())(* (get_timestamp ()) *)
+    last_ticks := get_time ();
+	let creature = new Creature.creature 100 100 100 100 in
+		main_loop creature creature#is_alive (!last_ticks)(* (get_timestamp ()) *)
