@@ -10,7 +10,7 @@ object (self)
   method to_string = 
     let rec print lst acc =
       match lst with
-      | (stat, value)::t ->  print t (acc^ stat ^ " : " ^ (string_of_int value) ^ ", ")
+      | (stat, value)::t ->  print t (acc^ stat ^ " : " ^ (string_of_int value) ^ " ")
       | [] -> acc
     in print self#get ""
 
