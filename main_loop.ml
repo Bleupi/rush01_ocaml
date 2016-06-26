@@ -42,16 +42,8 @@ let  wait_one_sec prev_time =
     last_ticks := curr_time_fps + tmp;
     let curr_time_sec = get_time () in
 	if (curr_time_sec - prev_time) >= 1000
-		then
-			begin
-			  print_endline ((string_of_int(prev_time)) ^ ", curr_time: " ^ string_of_int curr_time_sec ^ " --------------------------------------------------- +1second");
-				true
-			end
-	else
-		begin
-		   print_endline ((string_of_int(prev_time)) ^ ", curr_time: " ^ string_of_int curr_time_sec);
-			false
-        end
+    then true
+	else false
 
 let do_action action creature =
 	match action with
