@@ -1,8 +1,8 @@
-RESULT = test
-SOURCES = Creature.ml Display.ml main_loop.ml
-LIBS = sdl
-INCDIRS = +sdl
-PACKS = sdl.sdlimage sdl.sdlmixer sdl.sdlttf sdl
-OCAMLMAKEFILE = OCamlMakefile
+RESULT 			= itama
+SOURCES 		= button.ml State.ml Creature.ml testsdl.ml main_loop.ml
+LIBS			= sdl
+# INCDIRS			= +sdl
 THREADS =  yes
+PACKS			= sdl sdl.sdlimage sdl.sdlmixer sdl.sdlttf
+OCAMLMAKEFILE = OCamlMakefile 
 include $(OCAMLMAKEFILE)
