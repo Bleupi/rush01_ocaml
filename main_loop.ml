@@ -29,24 +29,27 @@ let get_time () =
 	Sdltimer.get_ticks ()
 
 let  wait_one_sec prev_time =
-	let curr_time = get_time () in
-    let delay = fps - (curr_time - !last_ticks) in
-    print_endline ("DELAY : " ^ string_of_int(delay) ^ " diff curr - last : " ^ string_of_int(curr_time - !last_ticks));
-    if delay > 0
-	then Sdltimer.delay delay
-    else if (fps - delay) > 0
-    then Sdltimer.delay (fps - delay)
-    else Sdltimer.delay fps;
-    last_ticks := curr_time + delay;
-	if (curr_time - prev_time) >= 1000
+	let curr_time_fps = get_time () in
+    let diff_time_fps = curr_time_fps - !last_ticks in
+    let delay = fps - diff_time_fps in
+    print_endline ("DELAY : " ^ string_of_int(delay) ^ " ___ diff curr-last = " ^ (string_of_int diff_time_fps));
+    let tmp = if delay > 0
+              then delay
+              else if (fps - delay) > 0
+              then (fps - delay)
+              else fps in
+    Sdltimer.delay tmp;
+    last_ticks := curr_time_fps + tmp;
+    let curr_time_sec = get_time () in
+	if (curr_time_sec - prev_time) >= 1000
 		then
 			begin
-			  print_endline (">= 1000 / 25 " ^ (string_of_int(prev_time)) ^ ", curr_time: "^string_of_int curr_time);
+			  print_endline ((string_of_int(prev_time)) ^ ", curr_time: " ^ string_of_int curr_time_sec ^ " --------------------------------------------------- +1second");
 				true
 			end
 	else
 		begin
-		   print_endline ("< 1000 / 25 " ^ (string_of_int(prev_time)) ^ ", curr_time: "^string_of_int curr_time);
+		   print_endline ((string_of_int(prev_time)) ^ ", curr_time: " ^ string_of_int curr_time_sec);
 			false
         end
 

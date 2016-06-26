@@ -16,4 +16,4 @@ let rec display_actions l =
 	| [] -> print_string ""
 	| hd::bd -> print_endline hd; display_actions bd
 let display_button_save_and_quit () = print_endline "display_button_save_and_quit"
-let get_event () = Random.self_init (); Random.int 6
+let get_event () = 6 (*Random.self_init (); Random.int 6*)
