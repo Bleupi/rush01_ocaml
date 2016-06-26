@@ -1,5 +1,5 @@
 RESULT 			= itama
-SOURCES 		= button.ml testsdl.ml
+SOURCES 		= button.ml State.ml testsdl.ml
 LIBS			= sdl
 # INCDIRS			= +sdl
 PACKS			= sdl sdl.sdlimage sdl.sdlmixer sdl.sdlttf

@@ -46,14 +46,18 @@ let run () =
 	let position_of_image = Sdlvideo.rect 0 0 300 300 in
 	let screen = Sdlvideo.set_video_mode width height [`DOUBLEBUF] in
 	let buttons = [new Button.eat 150 150; new Button.bath 350 150] in
-
-
+	let states = [new State.health 10 10 15;  new State.energy 100 100 100] in
 	Sdlvideo.blit_surface ~dst_rect:position_of_image ~src:image ~dst:screen ();
 	let rec blit_buttons lst = match lst with
 		| hd::tail -> hd#blit_to_surface screen; blit_buttons tail
 		| [] -> ()
 	in
-	blit_buttons buttons ;
+	blit_buttons buttons;
+	let rec blit_states lst = match lst with
+		| hd::tail -> hd#blit_to_surface screen; blit_states tail
+		| [] -> ()
+	in
+	blit_states states ;
 	Sdlvideo.flip screen;
 	Sdlmixer.fadein_music music 1.0;
 	wait_for_escape buttons;
