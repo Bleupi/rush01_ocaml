@@ -23,7 +23,8 @@ let  wait_one_sec timestamp =
 	Unix.sleepf ( ) //mettre calcul pour une seconde, il faut que cela soit un float, en dessous de 0, ce sont des fractions de secondes
 	??? Sdltimer.get_ticks ??? *)
 let last_ticks = ref 0
-let fps = 1000 / 25
+let fps = 1000 / 100
+let quit = ref false
 
 let get_time () =
 	Sdltimer.get_ticks ()
@@ -32,7 +33,6 @@ let  wait_one_sec prev_time =
 	let curr_time_fps = get_time () in
     let diff_time_fps = curr_time_fps - !last_ticks in
     let delay = fps - diff_time_fps in
-    print_endline ("DELAY : " ^ string_of_int(delay) ^ " ___ diff curr-last = " ^ (string_of_int diff_time_fps));
     let tmp = if delay > 0
               then delay
               else if (fps - delay) > 0
@@ -47,38 +47,49 @@ let  wait_one_sec prev_time =
 
 let do_action action creature =
 	match action with
-	| "eat" -> print_endline "action eat"; creature#eat 
-	| "bath" -> print_endline "action bath"; creature#bath
-	| "thunder" -> print_endline "action thunder"; creature#thunder
-	| "kill" -> print_endline "action kill"; creature#kill
-	| "sleep" -> print_endline "action sleep"; creature#sleep
-	| "save_and_quit" -> print_endline "action save_and_quit"; ignore (Save.save creature); creature (* TODO: test the save return value *)
+	| "eat" -> creature#eat 
+	| "bath" ->  creature#bath
+	| "thunder" ->  creature#thunder
+	| "kill" ->  creature#kill
+	| "sleep" ->  creature#sleep
+	| "save_and_quit" ->  ignore (Save.save creature); quit := true; new Creature.creature 0 0 0 0(* TODO: test the save return value *)
 (* 	| "sing" -> creature#sing  *)
-	| _ -> print_endline "action other"; creature
+	| _ ->  creature
 
 
 let rec main_loop creature creature_state prev_time =
 	match creature_state with
 	| false ->
 			begin
-				Display.display_actions 1;
-				Display.display_end ();
-				Display.update_display ();
-				let input = Display.get_event () in
-				if (input = "yes")
-					then play_new_game ()
-				else ()
+				if (!quit = true)
+					then ()
+				else
+					begin 
+						Display.clear_win ();
+						Display.display_end ();
+						Display.display_actions 1;
+						Display.update_display ();
+						let rec loop_event () = 
+							let input = Display.get_event 1 in
+							if (input = "yes")
+								then play_new_game ()
+							else if (input = "no")
+								then ()
+							else loop_event ()
+						in loop_event ()
+					end
 			end
 	| true	->
 			begin 
-				Display.display_creature ();
-				Display.display_meters creature#get;
-				Display.display_actions 0;
-				Display.update_display ();
-				let player_action = Display.get_event ()
+
+				let player_action = Display.get_event 0
 				in let new_creature = do_action player_action creature
 				in
 				begin
+					Display.display_creature ();
+					Display.display_meters new_creature#get;
+					Display.display_actions 0;
+					Display.update_display ();
 					(* wait_one_sec timestamp;  *)
 					if (wait_one_sec prev_time)
 					then
@@ -94,12 +105,13 @@ let rec main_loop creature creature_state prev_time =
 and
 play_new_game () =
     last_ticks := get_time ();
+    Display.clear_win ();
 	let creature_bis = new Creature.creature 100 100 100 100 in
 	main_loop creature_bis creature_bis#is_alive (!last_ticks)
 
 let () =
 	Init.init ();
-
+	Display.clear_win ();
     last_ticks := get_time ();	
 	let creature = ( match Save.load with
 	| None -> new Creature.creature 100 100 100 100

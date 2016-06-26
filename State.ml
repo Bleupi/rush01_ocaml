@@ -6,8 +6,8 @@ object (self)
 	val mutable _height = 0
 	val _x = x
 	val _y = y
-	val _surface_rect_fill_up = Sdlvideo.rect x y level 20
-	val _surface_rect_border = Sdlvideo.rect (x-2)(y-2) 104 24
+	val _surface_rect_fill_up = Sdlvideo.rect x y (level * 2) 24
+	val _surface_rect_border = Sdlvideo.rect (x-2)(y-2) (104 * 2) 28
 (* 	val _surface_rect_empty = create_RGB_surface_format
  *)	val mutable _to_screen = Sdlvideo.rect x y 0 0
 

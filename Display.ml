@@ -15,8 +15,8 @@ let pikattf = "ressources/pika.TTF"
 let music2 = Sdlmixer.load_music "ressources/sons/sleep.mp3"
  *)
  
-let bt_lst = [new Button.eat 100 150; new Button.bath 300 150; new Button.thunder 500 150; new Button.kill 700 150;new Button.sleep 300 250; new Button.save_and_quit 500 250] (* ; new Button.sing 350 150; *)
-let bt_end_lst = [new Button.yes 250 350; new Button.no 550 350]
+let bt_lst = [new Button.eat 100 (s_w - 250); new Button.bath 300 (s_w - 250); new Button.thunder 500 (s_w - 250); new Button.kill 700 (s_w - 250);new Button.sleep 300 (s_w - 150); new Button.save_and_quit 500 (s_w - 150)] (* ; new Button.sing 350 150; *)
+let bt_end_lst = [new Button.yes 250 (s_w - 250); new Button.no 550 (s_w - 250)]
 
 
 let display_text text_str =
@@ -25,7 +25,7 @@ let display_text text_str =
 	let text_dim = Sdlvideo.surface_dims text in
 	let t_w = match text_dim with | (w,_,_) -> w in
 	let t_h = match text_dim with | (_,h,_) -> h in
-	let position_of_text = Sdlvideo.rect  ((s_w/2) - (t_w/2)) ((s_h/2) - (t_h/2)) t_w t_h in
+	let position_of_text = Sdlvideo.rect  ((s_w/2) - (t_w/2)) ((s_h/2) - (t_h/2) + 150) t_w t_h in
 	Sdlvideo.blit_surface ~src:text ~dst:screen ~dst_rect:position_of_text ()
 
 let display_end () =
@@ -34,13 +34,15 @@ let display_end () =
 (*	let screen = Sdlvideo.set_video_mode width height [`DOUBLEBUF] in*)
     Sdlvideo.set_alpha image 200;
 	Sdlvideo.blit_surface ~dst_rect:position_of_image ~src:image ~dst:screen ();
-    display_text "GAME OVER!\nTry Again ?";
+    display_text "GAME OVER! Try Again ?";
     Sdlvideo.flip screen
 (* 	Sdlmixer.fadein_music music2 1.0;
  *)
 
+let clear_win () =
+	Sdlvideo.fill_rect screen (Int32.of_int 0xFFFFFF)
 
-let get_event () =
+let get_event flag =
 		match Sdlevent.wait_event () with
 			| evt -> match evt with
 						| Sdlevent.MOUSEBUTTONDOWN { Sdlevent.mbe_x = x ; Sdlevent.mbe_y = y ; mbe_button = b } -> 
@@ -50,16 +52,16 @@ let get_event () =
 									then hd#name 
 									else check_buttons tl
 									| [] -> ""
-								in check_buttons bt_lst
+								in check_buttons (if flag = 0 then bt_lst else bt_end_lst)
 
-						| Sdlevent.KEYDOWN { Sdlevent.keysym = Sdlkey.KEY_ESCAPE } -> "quit and save" (* A REMPLACER PAR LE BON NOM*)
+						| Sdlevent.KEYDOWN { Sdlevent.keysym = Sdlkey.KEY_ESCAPE } -> "save_and_quit" (* A REMPLACER PAR LE BON NOM*)
 						| _ -> ""
 
 let display_meters states_lst = 
 	let x =  10 in 
 	let y = 10 in 
 	let rec blit_states lst x y = match lst with
-		| (s, value)::tail -> (new State.state s x y value)#blit_to_surface screen; blit_states tail (x+150) (y)
+		| (s, value)::tail -> (new State.state s x y value)#blit_to_surface screen; blit_states tail (x+250) (y)
 		| [] -> ()
 	in
 	blit_states states_lst x y
