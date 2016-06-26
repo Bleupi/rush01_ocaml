@@ -42,3 +42,28 @@ object (self)
 	inherit button "bath" x y
 	initializer self#init
 end
+
+class sleep x y =
+object (self)
+	inherit button "sleep" x y
+	initializer self#init
+end
+
+
+class save_and_quit x y =
+object (self)
+	inherit button "save_and_quit" x y
+	initializer self#init
+end
+
+class yes x y =
+object (self)
+	inherit button "yes" x y
+	initializer self#init
+end
+
+class no x y =
+object (self)
+	inherit button "no" x y
+	initializer self#init
+end
