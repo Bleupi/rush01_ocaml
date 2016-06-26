@@ -9,7 +9,7 @@ object (self)
 	val _surface_rect_fill_up = Sdlvideo.rect x y level 20
 	val _surface_rect_border = Sdlvideo.rect (x-2)(y-2) 104 24
 (* 	val _surface_rect_empty = create_RGB_surface_format
- *)	val mutable _to_screen = Sdlvideo.rect 0 0 0 0
+ *)	val mutable _to_screen = Sdlvideo.rect x y 0 0
 
 	method name = _name
 	method init = 

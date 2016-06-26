@@ -14,8 +14,8 @@ let pikattf = "ressources/pika.TTF"
 (* let music1 = Sdlmixer.load_music "ressources/sons/pika.mp3" 
 let music2 = Sdlmixer.load_music "ressources/sons/sleep.mp3"
  *)
-
-let bt_lst = [new Button.eat 150 150; new Button.bath 350 150 ;new Button.thunder 150 150; new Button.kill 350 150 ;new Button.sleep 150 150; new Button.save_and_quit 150 150] (* ; new Button.sing 350 150; *)
+ 
+let bt_lst = [new Button.eat 100 150; new Button.bath 300 150; new Button.thunder 500 150; new Button.kill 700 150;new Button.sleep 300 250; new Button.save_and_quit 500 250] (* ; new Button.sing 350 150; *)
 let bt_end_lst = [new Button.yes 250 350; new Button.no 550 350]
 
 
